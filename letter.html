@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic Slide Heading</title>
+  <style>
+    body {
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fefefe;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+  overflow: hidden;
+}
+
+#word {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+}
+
+.slide-out {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.slide-in {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+  </style>
+</head>
+<body>
+  <h1>
+    <span id="word" class="slide">Start</span> Broadcasting
+  </h1>
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>

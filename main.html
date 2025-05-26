@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hover + Click Toggle Details</title>
+<style>
+  nav {
+    display: flex;
+    gap: 2rem;
+    background: #eee;
+    padding: 1rem;
+  }
+
+  details {
+    position: relative;
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    user-select: none;
+  }
+
+  /* Hide default marker */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '▾';
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease;
+    display: inline-block;
+  }
+
+  details[open] > summary::after {
+    transform: rotate(-180deg);
+  }
+
+  .dropdown-content {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <details>
+    <summary>New & Featured</summary>
+    <div class="dropdown-content">
+      <ul>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Bestsellers</a></li>
+        <li><a href="#">Launch Calendar</a></li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Men</summary>
+    <div class="dropdown-content">
+      <ul>
+        <li><a href="#">Shoes</a></li>
+        <li><a href="#">Clothing</a></li>
+      </ul>
+    </div>
+  </details>
+  
+  <!-- Add more details/menus as needed -->
+</nav>
+
+<script>
+  // Grab all details elements
+  const detailsElems = document.querySelectorAll('details');
+
+  detailsElems.forEach(details => {
+    // When mouse enters, open the dropdown
+    details.addEventListener('mouseenter', () => {
+      details.open = true;
+    });
+
+    // When mouse leaves, close the dropdown
+    details.addEventListener('mouseleave', () => {
+      details.open = false;
+    });
+  });
+</script>
+
+</body>
+</html>
