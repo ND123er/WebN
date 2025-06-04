@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Backdrop Navigation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Figtree", sans-serif;
+            background: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        button {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            text-decoration: none;
+            list-style-type: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            max-width: 180px;
+        }
+
+        header {
+            z-index: 1000; /* Reduced z-index */
+            width: 100%;
+            position: fixed;
+            top: 0;
+            background-color: #FFFFFF;
+        }
+
+        .header__wrapper {
+            padding: 20px 30px;
+            position: relative;
+            align-items: center;
+        }
+
+        .sub-menu {
+            display: flex;
+            gap: 80px;
+        }
+
+        .mega {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 24px;
+            grid-row-gap: 21px;
+        }
+
+        .menuitem a {
+            font-size: 17px;
+            color: #3D474D;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        header .menuitem span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer; /* Added cursor pointer */
+        }
+
+        header .menuitem span img {
+            max-width: 14px;
+            filter: invert(62%) sepia(9%) saturate(277%) hue-rotate(156deg) brightness(91%) contrast(93%) !important;
+        }
+
+        .header__btn {
+            display: flex;
+            background-color: #00AAFF;
+            padding: 14px 30px;
+            box-shadow: 0 10px 30px -10px #00AAFF;
+            color: white;
+            border-radius: 40px;
+            min-width: 160px;
+            gap: 20px;
+            height: 48px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header__btn span img {
+            max-width: 20px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        header.scrolled {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sub-menu__dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -20px);
+            background: white;
+            padding: 35px 30px;
+            border-radius: 20px;
+            min-height: 0px;
+            opacity: 0;
+            display: block;
+            visibility: hidden;
+            z-index: 1001; /* Higher than header but lower than backdrop */
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.8s ease, min-height 0.6s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* Added shadow for better visibility */
+        }
+
+        .sub-menu__dropdown.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+            min-height: 500px;
+        }
+
+        .submega {
+            grid-column: 1/-1 !important;
+        }
+
+        .mega__item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            min-width: 270px;
+            padding: 15px 30px;
+        }
+
+        .mega__text .heading {
+            display: flex;
+        }
+
+        .mega__icon img {
+            object-fit: contain;
+            min-width: 24px;
+            max-width: 24px;
+        }
+
+        .mega__text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .mega__lists {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 20px;
+        }
+
+        .mega__heading--new .mega__lists li {
+            margin-bottom: 10px;
+        }
+
+        .mega__heading--new .mega__lists .mega__item {
+            background-color: rgba(0, 0, 0, 0.05);
+            align-items: center;
+            border-radius: 24px;
+        }
+
+        .filter-navy {
+            filter: invert(38%) sepia(98%) saturate(2578%) hue-rotate(215deg) brightness(100%) contrast(108%) !important;
+        }
+
+        .filter-orange {
+            filter: invert(76%) sepia(62%) saturate(3483%) hue-rotate(359deg) brightness(101%) contrast(107%) !important;
+        }
+
+        .filter-green {
+            filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(382%) hue-rotate(66deg) brightness(87%) contrast(91%) !important;
+        }
+
+        /* FIXED BACKDROP STYLES */
+        .backdrop {
+            position: fixed; /* Changed from absolute to fixed */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(61, 71, 77, 0.5); /* Changed to use rgba for better transparency */
+            z-index: 1002; /* Highest z-index to be above everything */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none; /* Prevent interference when hidden */
+        }
+
+        .backdrop.act {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto; /* Allow clicks when active */
+        }
+
+        /*---------------------banner-----------------*/
+        .first {
+            position: relative;
+            padding: 0;
+            margin-top: 120px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .octopus {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PC9zdmc+) no-repeat center center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .custom-star {
+            width: unset;
+            height: unset;
+            object-fit: unset;
+        }
+
+        .subheading {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 120%;
+            color: rgba(61, 71, 77, 0.5);
+            letter-spacing: normal;
+        }
+
+        .heading-one {
+            font-size: 80px;
+            font-weight: 700;
+            line-height: 100%;
+            color: #3dcc3d;
+            letter-spacing: -2px;
+        }
+
+        .heading-one span {
+            display: block;
+        }
+
+        .content {
+            max-width: 1170px;
+            position: relative;
+            width: 100%;
+            padding: 0 25px;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        .white-pill {
+            background-color: white;
+            border-radius: 62px;
+            padding: 32px;
+        }
+
+        .button-xlarge {
+            display: flex;
+            line-height: 60px;
+            height: 60px;
+            padding: 0 40px;
+            font-size: 21px;
+            border-radius: 30px;
+            background-color: #00AAFF;
+            box-shadow: 0 10px 30px -10px #00AAFF;
+            color: white;
+            align-items: center;
+        }
+
+        .google-btn {
+            display: flex;
+            padding: 6px;
+            height: 32px;
+            width: 32px;
+            border-radius: 16px;
+            margin-right: 15px !important;
+            background: white;
+        }
+
+        .half-height {
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Backdrop moved outside header -->
+    <div class="backdrop"></div>
+    
+    <header>
+        <div class="container-fluid">
+            <div class="header__wrapper d-flex justify-content-between">
+                <div class="logo">
+                    <div style="width: 180px; height: 40px; background-color: #00AAFF; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">LOGO</div>
+                </div>
+                <nav>
+                    <ul class="sub-menu">
+                        <li class="menuitem">
+                            <span>
+                                <a href="">Product</a>
+                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+                                    <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                            <div class="sub-menu__dropdown">
+                                <ul class="sub-menu mega">
+                                    <li>
+                                        <div class="mega__heading">Features</div>
+                                        <div class="mega__block">
+                                            <ul class="mega__lists">
+                                                <li>
+                                                    <a href="">
+                                                        <div class="mega__item">
+                                                            <div class="mega__icon">
+                                                                <div style="width: 24px; height: 24px; background-color: #3D474D; border-radius: 4px;"></div>
+                                                            </div>
+                                                            <div class="mega__text">
+                                                                <span class="heading">Custom Styles</span>
+                                                                <span class="description">Make it Yours</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <div class="mega__item">
+                                                            <div class="mega__icon">
+                                                                <div style="width: 24px; height: 24px; background-color: #00AAFF; border-radius: 4px;"></div>
+                                                            </div>
+                                                            <div class="mega__text">
+                                                                <span class="heading">Advanced Features</span>
+                                                                <span class="description">Power Tools</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="mega__heading mega__heading--new">Overview</div>
+                                        <ul class="mega__lists">
+                                            <li>
+                                                <a href="">
+                                                    <div class="mega__item">
+                                                        <div class="mega__icon">
+                                                            <div style="width: 24px; height: 24px; background-color: #3dcc3d; border-radius: 4px;"></div>
+                                                        </div>
+                                                        <div class="mega__text"><span>Dashboard</span></div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="">
+                                                    <div class="mega__item">
+                                                        <div class="mega__icon">
+                                                            <div style="width: 24px; height: 24px; background-color: #ff6b6b; border-radius: 4px;"></div>
+                                                        </div>
+                                                        <div class="mega__text"><span>Analytics</span></div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="submega">
+                                        <div class="mega__block">Save 30% with the Meister Bundle</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="menuitem">
+                            <span>
+                                <a href="">Solutions</a>
+                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+                                    <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </li>
+                        <li class="menuitem"><a href="">Pricing</a></li>
+                        <li class="menuitem"><a href="">Contact Sales</a></li>
+                    </ul>
+                </nav>
+                <div class="header-right">
+                    <span><a href="">Log In</a></span>
+                    <a class="header__btn">Sign Up<span>→</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <section class="first">
+        <div class="octopus"></div>
+        <div class="content half-height">
+            <div class="subheading">It all starts with an idea.</div>
+            <h1 class="heading-one">Collaborative <span>Mind Mapping</span></h1>
+        </div>
+        <div class="d-flex align-items-center justify-content-center flex-column">
+            <div class="white-pill">
+                <a href="" class="button-xlarge">
+                    <div class="google-btn">G</div>Continue with Google
+                </a>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center half-height">
+            <a class="mt-5 mb-3" href="#">or sign up using your email</a>
+            <div class="mb-3">★★★★★</div>
+            <span>Trusted by <strong>37 million</strong> happy users worldwide</span>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuItems = document.querySelectorAll('.menuitem');
+            const backdrop = document.querySelector('.backdrop');
+
+            menuItems.forEach((item) => {
+                const dropdown = item.querySelector('.sub-menu__dropdown');
+
+                if (dropdown) {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+
+                        // Close other dropdowns
+                        document.querySelectorAll('.sub-menu__dropdown.open').forEach(openDrop => {
+                            if (openDrop !== dropdown) {
+                                openDrop.classList.remove('open');
+                            }
+                        });
+
+                        // Toggle current dropdown
+                        const isOpen = dropdown.classList.toggle('open');
+
+                        // Show/hide backdrop based on dropdown state
+                        if (isOpen) {
+                            backdrop.classList.add('act');
+                        } else {
+                            backdrop.classList.remove('act');
+                        }
+                    });
+                }
+            });
+
+            // Close dropdown when backdrop is clicked
+            backdrop.addEventListener('click', () => {
+                document.querySelectorAll('.sub-menu__dropdown.open').forEach(openDrop => {
+                    openDrop.classList.remove('open');
+                });
+                backdrop.classList.remove('act');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.menuitem') && !e.target.closest('.sub-menu__dropdown')) {
+                    document.querySelectorAll('.sub-menu__dropdown.open').forEach(openDrop => {
+                        openDrop.classList.remove('open');
+                    });
+                    backdrop.classList.remove('act');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
