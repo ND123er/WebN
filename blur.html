@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blurred Gradient Shape</title>
+    <style>
+        body {
+            background: #111;
+            /* Optional: dark background like yours */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .blur-shape {
+            width: 200px;
+            height: 150px;
+            background: radial-gradient(ellipse at 50% 70%, #FF5555 40%, #FDE598 100%);
+            filter: blur(40px);
+
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blur-shape"></div>
+
+</body>
+
+</html>
