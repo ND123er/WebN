@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Hover Over Home</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .nav-btn {
+      background: #e6e6e6;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: #ccc;
+    }
+
+    .section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      padding-top: 80px;
+    }
+
+    #home {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      z-index: 1;
+    }
+
+    #placeholder-about {
+      background: #f5f5f5;
+    }
+
+    #services {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+    }
+
+    #contact {
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
+      color: white;
+    }
+
+    #about {
+      position: fixed;
+      inset-inline: auto;
+      bottom:0;
+      width: 100%;
+      height: 100vh;
+      max-width: 1160px;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      z-index: 900;
+      transform: translateY(0);
+      transition: transform 0.5s ease-out;
+      pointer-events: none; /* Prevents it from blocking clicks */
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <button class="nav-btn" onclick="scrollToId('home')">Home</button>
+      <button class="nav-btn" onclick="scrollToId('about')">About</button>
+      <button class="nav-btn" onclick="scrollToId('services')">Services</button>
+      <button class="nav-btn" onclick="scrollToId('contact')">Contact</button>
+    </nav>
+  </header>
+
+  <section id="home" class="section">Home
+     <div id="about" class="section">About</div>
+  </section>
+ 
+  <section id="services" class="section">Services</section>
+  <section id="contact" class="section">Contact</section>
+
+  
+
+  <script>
+    const aboutSection = document.getElementById('about');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      // Trigger animation when scrolling to About's placeholder section
+      if (scrollY >= windowHeight * 0.5 && scrollY < windowHeight * 1.5) {
+        aboutSection.style.transform = `translateY(-${windowHeight}px)`; // Moves it over Home
+      } else {
+        aboutSection.style.transform = 'translateY(0px)'; // Resets it below view
+      }
+    });
+
+    function scrollToId(id) {
+      if (id === 'about') {
+        // Scroll to the placeholder div, since real #about is fixed
+        window.scrollTo({
+          top: window.innerHeight,
+          behavior: 'smooth'
+        });
+      } else {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  </script>
+
+</body>
+</html>
