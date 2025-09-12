@@ -22,8 +22,10 @@
 
     <header>
         <div class="container-fluid">
+            <div class="header-main">
             <div class="header__wrapper d-flex justify-content-between">
                 <div class="logo"><img src="images/logo.svg" alt=""></div>
+                <div class="responsive-menu">
                 <nav>
                     <ul class="sub-menu">
                         <li class="menuitem"><span><a href="">Product</a>
@@ -378,6 +380,13 @@
                     <span><a href="">Log In</a></span>
                     <a class="header__btn">Sign Up<span><img src="images/btn-arrow.svg" alt=""></span></a>
                 </div>
+                </div>
+            </div>
+            <div class="drop-btn position-relative">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             </div>
         </div>
         <div class="backdrop"></div>
@@ -408,8 +417,14 @@
     </section>
     <section class="slider">
         <div class="container">
+             <div class="slider__content d-md-none">
+                    <div class="intro-text">
+                        <h2>Explore our trips</h2>
+                        <p>Remarkable experiences to inspire the mind</p>
+                    </div>
+                </div>
         <div class="slider__wrapper">
-            <div class="slider__item">
+            <div class="slider__item d-none d-md-block">
                 <div class="slider__content">
                     <div class="intro-text">
                         <h2>Explore our trips</h2>
@@ -569,10 +584,11 @@
         </div>
         </div>
     </section>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     <script src="customs.js"></script>
 </body>
 
-</html>
+</html>ggg
